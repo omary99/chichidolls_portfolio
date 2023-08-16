@@ -1,3 +1,5 @@
+<?php include "includes/db.php"; ?>
+
 <nav class="navbar navbar-expand-lg bg-white navbar-light fixed-top shadow py-lg-0 px-4 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
     <a href="index.html" class="navbar-brand d-block d-lg-none">
         <h1 class="text-primary fw-bold m-0">Chichidolls</h1>
@@ -7,19 +9,39 @@
     </button>
     <div class="collapse navbar-collapse justify-content-between py-4 py-lg-0" id="navbarCollapse">
         <div class="navbar-nav ms-auto py-0">
-            <a href="#home" class="nav-item nav-link active">Home</a>
-            <a href="#about" class="nav-item nav-link">About</a>
-            <a href="#service" class="nav-item nav-link">Services</a>
-            <a href="#testimonial" class="nav-item nav-link">Testimonial</a>
+        <?php
+                $query = "SELECT * FROM navigation_bar LIMIT 4";
+                $select_all_navigations_query = mysqli_query($connection, $query);
+
+                while($row = mysqli_fetch_assoc($select_all_navigations_query)){
+                    $navbar_title = $row['navbar_title'];
+                    $navbar_link = $row['navbar_link'];
+
+                    echo "<a href='{$navbar_link}' class='nav-item nav-link active'>{$navbar_title}</a>";
+                }
+                ?>
         </div>
         <a href="index.html" class="navbar-brand bg-secondary py-3 px-4 mx-3 d-none d-lg-block">
             <h1 class="text-primary fw-bold m-0">Chichidolls</h1>
         </a>
         <div class="navbar-nav me-auto py-0">
-            <a href="#project" class="nav-item nav-link">Portfolio/Gallery</a>
-            <a href="#skill" class="nav-item nav-link">Categories</a>
-            <a href="#team" class="nav-item nav-link">Collections</a>
-            <a href="#contact" class="nav-item nav-link">Contact </a>
+              <?php
+        $query = "SELECT * FROM navigation_bar WHERE navbar_id BETWEEN 5 AND 8 AND navbar_title IN ('Portfolio/Gallery', 'Categories', 'Collections', 'Contact')";
+        $select_all_navigations_query = mysqli_query($connection, $query);
+
+        // Debugging code to display query and error
+        if (!$select_all_navigations_query) {
+            die('Query Error: ' . mysqli_error($connection) . '<br>Query: ' . $query);
+        }
+
+        while ($row = mysqli_fetch_assoc($select_all_navigations_query)) {
+            $navbar_title = $row['navbar_title'];
+            $navbar_link = $row['navbar_link'];
+
+            echo "<a href='{$navbar_link}' class='nav-item nav-link active'>{$navbar_title}</a>";
+        }
+        ?>
+
         </div>
     </div>
 </nav>
